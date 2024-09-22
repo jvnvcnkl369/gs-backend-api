@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Relation } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Relation, IsNull } from "typeorm"
 import { Task } from "./Task.js"
 
 @Entity()
