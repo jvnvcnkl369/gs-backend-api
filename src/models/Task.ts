@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
 import { User } from "./User.js"
 
 @Entity()
@@ -26,6 +26,16 @@ export class Task {
     })
     status: "in progress" | "done"
 
+    @Column()
+    userId: string;
+  
     @ManyToOne(() => User, user => user.tasks)
-    user: Relation<User>
+    @JoinColumn({ name: "userId" })
+    user: Relation<User>;
+  
+    @CreateDateColumn()
+    createdAt: Date;
+  
+    @UpdateDateColumn()
+    updatedAt: Date;
 }

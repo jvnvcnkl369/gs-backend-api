@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { isValidEmail, isValidJson } from "../helpers/helpers.js";
+import { Request } from "express";
+import { isValidEmail} from "../helpers/helpers.js";
 import { AppDataSource } from "../data-source.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -18,12 +18,12 @@ export class UserService {
       password: hashedPassword,
     });
 
-    const token = jwt.sign({ user: newUser }, process.env.JWT_SECRET || "", {
+
+    await userRepository.save(newUser);
+    const token = jwt.sign({ user: {email, id: newUser.id} }, process.env.JWT_SECRET || "", {
       expiresIn: "1h",
     });
-    await userRepository.save(newUser);
-
-    return { token, user: newUser };
+    return { token, id: newUser.id, email: newUser.email };
   }
   static async loginUser(req: Request) {
     const userRepository = AppDataSource.getRepository(User);
@@ -39,7 +39,7 @@ export class UserService {
       throw new ErrorWithStatus(401, "Invalid credentials.");
     }
 
-    const token = jwt.sign({ user: user }, process.env.JWT_SECRET || "", {
+    const token = jwt.sign({ user: {email, id: user.id} }, process.env.JWT_SECRET || "", {
       expiresIn: "1h",
     });
 
