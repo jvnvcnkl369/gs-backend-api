@@ -61,7 +61,7 @@ export class TaskController {
       const updatedData = req.body;
 
       const task = await this.taskService.updateTask(userId, taskId, updatedData);
-      res.json(task);
+      res.status(204).json(task);
     } catch (error) {
       if (error.message === "Task not found") {
         res.status(404).json({ error: error.message });
